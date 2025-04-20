@@ -1,13 +1,33 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import Logo from "./Logo.tsx";
 import MenuAppBar from "./MenuAppBar.tsx";
 import * as React from "react";
 
 const Navbar: FC = () => {
     const [show, setShow] = React.useState<boolean>(false)
+    const [isScrolled, setIsScrolled] = React.useState<boolean>(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY >= 5) {
+                setIsScrolled(true);
+                setShow(false)
+            } else {
+                setIsScrolled(false);
+            }
+        }
+        window.addEventListener("scroll", handleScroll)
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        }
+    }, [isScrolled])
+    
+
+    const scroll = isScrolled ? "py-6 bg-indigo-500" : "py-4"
 
     return (
-        <div className="w-full fixed bg-indigo-100 py-4">
+        <div className={`w-full fixed py-4 ${scroll}`}>
             <div className="container mx-auto px-4">
                 <nav className="flex items-center justify-between">
                     <Logo/>
